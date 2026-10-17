@@ -25,26 +25,56 @@ waiting on you, and which are free for the next task.
   receive one.
 - **A diff view per worktree.** See what a worktree has changed relative to `main` (or any base you
   choose), with syntax highlighting.
-- **Sessions that outlive the window.** Terminals run in a [herdr](#requirements) server, so
+- **Sessions that outlive the window.** Terminals run in a [herdr](https://herdr.dev) server, so
   closing Keitora doesn't end them. If that server goes down, Keitora brings your sessions back and
   resumes their conversations.
 - **More than one project.** Each repo you add becomes a group in the sidebar, and you can switch
   between them without losing anything.
 
-## Requirements
+## Setup
 
-- **macOS** (main platform) or **Windows**.
-- **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** installed, so `claude` runs
-  from a terminal. Codex is optional.
-- **herdr**, the terminal server Keitora runs sessions in. Keitora finds it on your `PATH` or in
-  herdr's usual install locations. If it can't, the sidebar says so and tells you where it looked.
-- **git**, and a repo you want to work in with one or more worktrees.
+Keitora runs on macOS and Windows. There are no prebuilt downloads yet, so setup means installing
+a couple of tools and building the app once.
 
-## Getting started
+### 1. Install Claude Code
 
-There are no prebuilt downloads yet, so for now you build Keitora yourself. You'll need a stable
-Rust toolchain, Node.js and Yarn. On macOS you also need the Xcode Command Line Tools
-(`xcode-select --install`).
+Follow Anthropic's [Claude Code setup guide](https://code.claude.com/docs/en/setup), then check
+that `claude` starts from a new terminal. Keitora runs `claude` in each worktree, so it needs to
+work on its own first. Codex is optional; install it too if you want to use it in some worktrees.
+
+### 2. Install herdr
+
+[herdr](https://herdr.dev) is the terminal server Keitora runs every session in. It's what keeps
+your sessions alive when Keitora's window is closed. The
+[herdr install guide](https://herdr.dev/docs/install/) covers every option (Homebrew, mise, Nix,
+manual downloads). The quickest routes are:
+
+```sh
+# macOS
+curl -fsSL https://herdr.dev/install.sh | sh
+```
+
+```powershell
+# Windows (PowerShell)
+powershell -ExecutionPolicy Bypass -c "irm https://herdr.dev/install.ps1 | iex"
+```
+
+Open a new terminal and run `herdr --version` to check it's on your `PATH`. You don't need to start
+herdr yourself: Keitora starts its server when it opens.
+
+### 3. Install the build tools
+
+You need:
+
+- **Rust**, stable, installed with [rustup](https://rustup.rs).
+- **Node.js** (current LTS) and **Yarn** 1.x: `npm install -g yarn`.
+- **git**.
+- On **macOS**, the Xcode Command Line Tools: `xcode-select --install`.
+- On **Windows**, the Microsoft C++ Build Tools ("Desktop development with C++") and Git for
+  Windows. Tauri's [prerequisites page](https://v2.tauri.app/start/prerequisites/) walks through
+  both.
+
+### 4. Build and install Keitora
 
 ```sh
 git clone https://github.com/rudoi/keitora.git
@@ -53,16 +83,32 @@ yarn install
 yarn tauri:bundle
 ```
 
-The built app ends up under `src-tauri/target/release/bundle/`.
+The first build compiles a lot of Rust and can take several minutes. When it finishes:
 
-Then:
+- **macOS:** open the `.dmg` in `src-tauri/target/release/bundle/dmg/` and drag Keitora to
+  Applications.
+- **Windows:** run the installer in `src-tauri/target/release/bundle/nsis/`. It isn't signed yet,
+  so SmartScreen may warn you; choose **More info**, then **Run anyway**.
 
-1. Open Keitora and click **+** next to *Projects* to add a repo.
-2. Choose which of its worktrees to track. You can create new worktrees from the sidebar later.
-3. Click a worktree to open its session. Add tasks with **New** on the board.
+### 5. Add your first project
 
-Keitora saves a project's settings in a `keitora.toml` at the repo root. The defaults work fine,
-and you can change most things from **Settings** without editing the file.
+1. Open Keitora and click **+** next to *Projects*, then choose your repo's folder.
+2. Pick which of its git worktrees to track. You can create more from the sidebar later; new ones
+   go in `~/.keitora/<project>` unless you choose another folder in **Settings**.
+3. Click a worktree to open its Claude Code session, and add tasks with **New** on the board.
+
+Keitora saves a project's settings in a `keitora.toml` at the repo root and installs the Claude Code
+hooks that report each session's status. If the `keitora` command isn't on your `PATH`, Keitora
+offers to add it to `~/.local/bin`. Make sure that folder is on your `PATH`; on Windows it usually
+isn't by default.
+
+### If something isn't working
+
+- **The sidebar says herdr wasn't found.** The card lists everywhere Keitora looked. Either fix your
+  `PATH` or point Keitora at the binary with `herdr_bin` under `[pty]` in `keitora.toml`, then
+  press **Restart** on that card.
+- **A session shows offline and never starts.** Check that `claude` runs in a terminal opened in
+  that worktree. If it does, look in Keitora's log at `~/.keitora/logs/keitora.log`.
 
 ## The `keitora` command
 
