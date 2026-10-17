@@ -1,0 +1,32 @@
+Log started at 01/01/2026 12:00:00 (2026-01-01T12:00:00Z)
+Resolved project argument D:\repos\proj-worktrees\alpha\MyGame.uproject to D:\repos\proj-worktrees\alpha\MyGame.uproject
+Command line: C:\UE\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll MyGameEditor Win64 Development -Project=D:\repos\proj-worktrees\alpha\MyGame.uproject -Progress -NoHotReloadFromIDE -MaxParallelActions=4
+Executing up to 4 actions based on MaxProcessorCount override
+Building UnrealEditor - MyGameEditor - Win64 - Development
+Using Unreal Build Accelerator local executor to run 130 action(s)
+[1/130] Compile [x64] Module.BackendSDK.2.cpp
+[2/130] Compile [x64] Module.BackendSDK.1.cpp
+[3/130] Compile [x64] Module.BackendSDK.4.cpp
+[4/130] Compile [x64] Module.BackendSDK.7.cpp
+[5/130] Compile [x64] Module.BackendSDK.3.cpp
+[6/130] Compile [x64] Module.BackendSDKAux.cpp
+[7/130] Link [x64] UnrealEditor-BackendSDKAux.lib
+[8/130] Compile [x64] Module.BackendSDK.8.cpp
+[12/130] Link [x64] UnrealEditor-BackendSDK.lib
+[13/130] Link [x64] UnrealEditor-BackendSDK.dll
+[14/130] Link [x64] UnrealEditor-BackendSDKAux.dll
+[15/130] Compile [x64] Module.MyGame.12.cpp
+[94/130] Link [x64] UnrealEditor-OnlineSDK.dll
+[95/130] Link [x64] UnrealEditor-MyGame.dll
+[109/130] Link [x64] UnrealEditor-MyGameEditor.dll
+[120/130] Compile [x64] AudioStreamController.cpp
+[123/130] Compile [x64] AudioSubsystem.cpp
+[125/130] Link [x64] UnrealEditor-MyAudio.lib
+[126/130] Link [x64] UnrealEditor-MyAudio.dll
+[128/130] Link [x64] UnrealEditor-OnlineProvider.lib
+[129/130] Link [x64] UnrealEditor-OnlineProvider.dll
+[130/130] WriteMetadata MyGameEditor.target [NoUba]
+Total time in Unreal Build Accelerator local executor: 1089.71 seconds
+
+Result: Succeeded
+Total execution time: 1098.57 seconds

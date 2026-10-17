@@ -1,0 +1,45 @@
+# Logs
+logs
+*.log
+# …but the committed UBT log fixtures the activity tests parse are not logs to ignore.
+!src-tauri/src/activity/progress/fixtures/*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Rust workspace build output
+/target
+
+# Workflow harness per-branch state
+WORKFLOW_STATE.json
+
+# Husky bootstrap (auto-generated on `yarn install` / `yarn prepare`).
+# The .husky/pre-commit hook IS committed; only the generated _ dir is ignored.
+.husky/_
+
+# Personal project config (dogfood config is local-only)
+keitora.toml
+
+# Machine-local Claude Code settings
+.claude/settings.local.json
+
+# Machine-local Codex session-state hooks
+.codex/hooks.json
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

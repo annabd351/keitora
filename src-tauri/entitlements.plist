@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Add entitlements below ONLY if a specific failure demands it.        -->
+  <!--                                                                       -->
+  <!-- com.apple.security.cs.allow-jit                                       -->
+  <!--   Add if notarization rejects the build, or if the claude binary      -->
+  <!--   crashes at launch because Node/V8 JIT pages are blocked under       -->
+  <!--   hardened runtime.                                                   -->
+  <!--                                                                       -->
+  <!-- com.apple.security.cs.allow-unsigned-executable-memory                -->
+  <!--   Add if V8 requires RWX memory pages (error in system log:           -->
+  <!--   "...RESTRICT allow-unsigned-executable-memory...").                 -->
+  <!--                                                                       -->
+  <!-- com.apple.security.cs.disable-library-validation                      -->
+  <!--   Add if portable-pty native dylibs fail to load                      -->
+  <!--   (error: "Library not loaded: ...").                                 -->
+  <!--                                                                       -->
+  <!-- com.apple.security.inherit                                             -->
+  <!--   Add if child processes (the claude binary) need to inherit          -->
+  <!--   entitlements from Keitora.                                          -->
+  <!--                                                                       -->
+  <!-- Example pair to add an entitlement:                                   -->
+  <!--   <key>com.apple.security.cs.allow-jit</key>                         -->
+  <!--   <true/>                                                              -->
+</dict>
+</plist>

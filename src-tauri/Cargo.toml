@@ -1,0 +1,84 @@
+[package]
+name = "keitora"
+version = "0.2.0"
+description = "Keitora — Logistics Dispatch"
+authors = ["Andrew Rudoi"]
+edition = "2021"
+license = "MIT"
+
+[lib]
+name = "keitora_lib"
+crate-type = ["rlib"]
+
+# The CLI crate owns the `keitora` binary name; the app builds as `keitora-app` to avoid
+# a target-dir collision. The bundle is still `Keitora.app` (productName in tauri.conf).
+[[bin]]
+name = "keitora-app"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-opener = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-notification = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+base64 = "0.22"
+# Transfer subsystem: sha256 of the Claude JSONL for ledger
+# matching, hex encoding of the digest, RFC 3339 mtime for the confirm preview,
+# and home-dir resolution for ~/.claude / ~/.codex. All already present in the
+# workspace lockfile (transitive), so no new crates compile.
+sha2 = "0.10"
+hex = "0.4"
+chrono = "0.4"
+dirs = "6"
+keitora-tasks = { path = "../crates/keitora-tasks" }
+log = "0.4"
+env_logger = "0.11"
+# Random suffix for uniquely-named clipboard-paste temp files.
+# Was dev-only; `clipboard_image::save_image_to_temp` needs it at runtime, not just
+# under test, so it moves up from [dev-dependencies] (removed below).
+rand = "0.8"
+# The filesystem watcher. Desktop is the only target.
+notify = "6"
+# Async runtime handles used by the task/dispatch/transfer commands, which run under
+# `tauri::async_runtime` (Tokio). `time` for bounded sleeps; `sync` for the
+# `tokio::sync::Mutex` dispatch gate.
+tokio = { version = "1", features = ["time", "sync"] }
+# Live daemon process stats (CPU / memory / uptime) for the rail daemon card.
+# `system` feature only — no disk/network/component/user probes.
+sysinfo = { version = "0.37", default-features = false, features = ["system"] }
+
+# Syntax highlighting for the diff view. `tree-sitter` + `tree-sitter-highlight` pinned to the
+# same minor; grammars decouple via the `LANGUAGE: LanguageFn` constant, so their older pins
+# don't pull a second `tree-sitter`. Highlighting runs off the UI thread over full file
+# contents and is cached by content identity (see `diff::highlight`).
+tree-sitter = "0.25"
+tree-sitter-highlight = "0.25"
+tree-sitter-rust = "0.24"
+# TypeScript highlighting layers over the JavaScript base query; C++ over the C base query.
+tree-sitter-javascript = "0.23"
+tree-sitter-typescript = "0.23"
+tree-sitter-c = "0.24"
+tree-sitter-cpp = "0.23"
+
+# Force-kill and liveness primitives for the herdr server restart path, used by the
+# app's own `backend::platform`.
+[target.'cfg(unix)'.dependencies]
+nix = { version = "0.29", features = ["signal"] }
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.58", features = [
+    "Win32_Foundation",
+    "Win32_System_SystemInformation",
+    "Win32_System_Threading",
+] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[lints]
+workspace = true

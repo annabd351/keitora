@@ -1,0 +1,15 @@
+Log started at 01/01/2026 12:00:00 (2026-01-01T12:00:00Z)
+Resolved project argument D:\repos\proj-worktrees\beta\MyGame.uproject to D:\repos\proj-worktrees\beta\MyGame.uproject
+Command line: C:\UE\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll MyGameEditor Win64 Development -Project=D:\repos\proj-worktrees\beta\MyGame.uproject -Progress
+Building UnrealEditor - MyGameEditor - Win64 - Development
+Using Unreal Build Accelerator local executor to run 42 action(s)
+[1/42] Compile [x64] Module.MyGame.1.cpp
+[2/42] Compile [x64] Module.MyGame.2.cpp
+[3/42] Compile [x64] MyPlayerController.cpp
+D:\repos\proj-worktrees\beta\Source\MyGame\MyPlayerController.cpp(88): error C2065: 'MissingSymbol': undeclared identifier
+D:\repos\proj-worktrees\beta\Source\MyGame\MyPlayerController.cpp(90): error C2228: left of '.Value' must have class/struct/union
+[3/42] Compile [x64] MyPlayerController.cpp -- Exited with error code 2
+Total time in Unreal Build Accelerator local executor: 12.40 seconds
+
+Result: Failed (OtherCompilationError)
+Total execution time: 13.02 seconds

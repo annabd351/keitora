@@ -1,0 +1,6 @@
+Log started at 01/01/2026 13:00:00 (2026-01-01T13:00:00Z)
+Resolved project argument D:\repos\proj-worktrees\alpha\MyGame.uproject to D:\repos\proj-worktrees\alpha\MyGame.uproject
+Using Unreal Build Accelerator local executor to run 40 action(s)
+[1/40] Compile [x64] Module.MyGame.1.cpp
+[2/40] Compile [x64] Module.MyGame.2.cpp
+[3/40] Compile [x64] Module.MyGame.3.cpp

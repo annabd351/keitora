@@ -1,0 +1,37 @@
+#!/bin/sh
+# Worktree-safe guard: husky sets core.hooksPath in the SHARED git config (this
+# repo is checked out as many worktrees). If a given worktree hasn't run
+# `yarn install`, lint-staged/biome aren't available — skip rather than block.
+[ -d ".husky/_" ] || exit 0
+
+# Block real project/org/personal names from the local, never-committed denylist
+# (see AGENTS.md "Placeholder names only"). It lives in the shared git dir so
+# every worktree picks it up; no file means no check.
+terms="$(git rev-parse --git-common-dir)/info/sensitive-terms"
+if [ -f "$terms" ]; then
+  # `|| true`: husky runs hooks under `sh -e`, and grep exits 1 on no match.
+  patterns="$(tr -d '\r' < "$terms" | grep -vE '^[[:space:]]*(#|$)' || true)"
+  if [ -n "$patterns" ]; then
+    hits="$(git diff --cached -U0 --no-color | grep -E '^\+' | grep -vE '^\+\+\+ ' \
+      | grep -inE -e "$patterns" || true)"
+    if [ -n "$hits" ]; then
+      echo "pre-commit: staged lines match the local sensitive-terms denylist:" >&2
+      echo "$hits" >&2
+      echo "Swap them for placeholders (see AGENTS.md) and re-stage." >&2
+      exit 1
+    fi
+  fi
+fi
+
+# Format/lint only the staged files (biome on ts/tsx, rustfmt on rs).
+npx lint-staged
+
+# Clippy can't run per-file; only gate commits that actually touch Rust.
+if git diff --cached --name-only | grep -q '\.rs$'; then
+  cargo clippy --workspace --all-targets -- -D warnings
+fi
+
+# Type-check the frontend when TS/TSX is staged (fast, ~2-5s).
+if git diff --cached --name-only | grep -qE '\.(ts|tsx)$'; then
+  yarn tsc --noEmit
+fi

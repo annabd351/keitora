@@ -1,0 +1,14 @@
+# Workspace root for Keitora's Rust crates: the shared task-store library, the
+# `task` CLI, and the Tauri app. One build graph, one target/ dir.
+[workspace]
+resolver = "2"
+members = ["crates/keitora-tasks", "crates/keitora-cli", "src-tauri"]
+
+# Strict, zero-warning baseline for every workspace crate. Members opt in via
+# `[lints]\nworkspace = true`. Deliberately NOT enabling pedantic/nursery or any
+# restriction lint (no unwrap_used/print_stdout): clippy::all is the agreed scope.
+[workspace.lints.rust]
+warnings = "deny"
+
+[workspace.lints.clippy]
+all = "deny"

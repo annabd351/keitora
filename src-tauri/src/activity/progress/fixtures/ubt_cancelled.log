@@ -1,0 +1,13 @@
+Log started at 01/01/2026 12:00:00 (2026-01-01T12:00:00Z)
+Resolved project argument D:\repos\proj-worktrees\alpha\MyGame.uproject to D:\repos\proj-worktrees\alpha\MyGame.uproject
+Command line: C:\UE\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll MyGameEditor Win64 Development -Project=D:\repos\proj-worktrees\alpha\MyGame.uproject -Progress
+Building UnrealEditor - MyGameEditor - Win64 - Development
+Using Unreal Build Accelerator local executor to run 60 action(s)
+[1/60] Compile [x64] Module.MyGame.1.cpp
+[2/60] Compile [x64] Module.MyGame.2.cpp
+[3/60] Compile [x64] Module.MyGame.3.cpp
+[4/60] Compile [x64] Module.MyGame.4.cpp
+[5/60] Compile [x64] Module.MyGame.5.cpp
+[6/60] Compile [x64] Module.MyGame.6.cpp
+[7/60] Compile [x64] Module.MyGame.7.cpp
+[8/60] Compile [x64] Module.MyGame.8.cpp

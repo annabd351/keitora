@@ -1,0 +1,15 @@
+[project]
+name = "keitora"
+worktrees_dir = "../keitora-worktrees"
+
+[tasks]
+db_path = "../keitora-worktrees/shared/tasks.db"
+# One entry per worktree. The main worktree MUST be listed by your repo's
+# root directory name (it is resolved by basename, not the literal "main") —
+# here that matches [project] name = "keitora".
+worktrees = ["keitora"]
+archive_days = 30
+log_retention_days = 90
+
+[dispatch]
+steps = ["/clear", "/park", "/workflow {task_number}"]

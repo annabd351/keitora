@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+/* Design tokens ported from the original dispatch-home design, exposed to Tailwind v4 as
+   theme variables so utilities like `bg-bg-2`, `text-tx-2`, `text-accent`,
+   `bg-idle`, `border-line`, `rounded-card`, `font-mono` resolve. The existing
+   terminal shell keeps using the matching plain vars in App.css. */
+@theme {
+  /* surfaces — green-tinted dark (sage/teal logo field), high-contrast */
+  --color-bg-0: #0a0e0d;
+  --color-bg-1: #0f1413;
+  --color-bg-2: #151c1a;
+  --color-bg-3: #1c2522;
+  --color-line: rgba(230, 250, 245, 0.07);
+  --color-line-2: rgba(230, 250, 245, 0.04);
+
+  /* text */
+  --color-tx-1: #e9efed;
+  --color-tx-2: #9bb0aa;
+  --color-tx-3: #637872;
+
+  /* accent — truck yellow (hero) + sage/teal (secondary), from the Keitora logo */
+  --color-accent: #f0c665;
+  --color-accent-dim: rgba(240, 198, 101, 0.15);
+  --color-accent-2: #4fd0b4;
+  --color-on-accent: #151205;
+  /* accent used as FOREGROUND text/icon — equals accent in dark; deepened in light
+     (truck-yellow is unreadable on white). Use the `text-accent-text` utility. */
+  --color-accent-text: #f0c665;
+
+  /* semantic — session state */
+  --color-idle: #46d18a;
+  --color-busy: #e9b13a;
+  --color-waiting: #5b9dff;
+  --color-offline: #76867f;
+  --color-done: #ff8a3d; /* finished turn, awaiting the user (attention) */
+
+  /* scrollbar — minimal tx-2-derived gray-green */
+  --color-scrollbar: rgba(155, 176, 170, 0.22);
+  --color-scrollbar-hover: rgba(155, 176, 170, 0.4);
+
+  /* semantic — priority */
+  --color-urgent: #ff5d5d;
+  --color-high: #f5a623;
+  --color-normal: #56b6e0;
+  --color-low: #6b7585;
+
+  /* radii */
+  --radius-card: 11px;
+  --radius-chip: 8px;
+
+  /* fonts */
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+
+  /* animations */
+  --animate-indeterminate: indeterminate 1.5s ease-in-out infinite;
+
+  @keyframes indeterminate {
+    0% { transform: translateX(-100%); width: 40%; }
+    50% { transform: translateX(150%); width: 60%; }
+    100% { transform: translateX(350%); width: 40%; }
+  }
+}
+
+/* Light theme — overrides the dark @theme token values when <html data-theme="light">.
+   Set before first paint by the anti-FOUC script in index.html. Unlayered, so it beats
+   the layered @theme :root defaults regardless of specificity. Dark mode uses the
+   defaults above (no block). Keep in lockstep with the short-name overrides in App.css.
+   --color-accent / --color-on-accent are intentionally NOT overridden — accent fills
+   stay yellow; only accent-as-text (--color-accent-text) deepens. */
+html[data-theme="light"] {
+  --color-bg-0: #eef2f0;
+  --color-bg-1: #f2f6f4;
+  --color-bg-2: #f7faf8;
+  --color-bg-3: #ffffff;
+  --color-line: rgba(15, 30, 25, 0.12);
+  --color-line-2: rgba(15, 30, 25, 0.07);
+
+  --color-tx-1: #14201d;
+  --color-tx-2: #4a5f59;
+  --color-tx-3: #7b908a;
+
+  --color-accent-text: #9a6b12;
+  --color-accent-dim: rgba(240, 198, 101, 0.28);
+  --color-accent-2: #1a9e82;
+
+  --color-idle: #1f9d63;
+  --color-busy: #b5791a;
+  --color-waiting: #2f6fe0;
+  --color-offline: #6a7a74;
+  --color-done: #d9611a;
+
+  --color-scrollbar: rgba(20, 40, 35, 0.22);
+  --color-scrollbar-hover: rgba(20, 40, 35, 0.4);
+
+  --color-urgent: #d83b3b;
+  --color-high: #c67d10;
+  --color-normal: #1f88b8;
+  --color-low: #6b7585;
+}
+
+/* Diff view line coloring — green (added) / red (removed), legible in both themes.
+   Required by design (distinct from syntax highlighting). Dark values on :root; light
+   overridden under [data-theme="light"], matching the app's theme convention. The edge is
+   a solid inset bar on the gutter so a change reads instantly even at a glance. */
+:root {
+  --diff-add-bg: rgba(70, 209, 138, 0.16);
+  --diff-add-tx: #bdeccc;
+  --diff-add-edge: #46d18a;
+  --diff-del-bg: rgba(255, 93, 93, 0.15);
+  --diff-del-tx: #ffc9c9;
+  --diff-del-edge: #ff5d5d;
+  --diff-gutter-add: rgba(70, 209, 138, 0.22);
+  --diff-gutter-del: rgba(255, 93, 93, 0.22);
+}
+html[data-theme="light"] {
+  --diff-add-bg: rgba(26, 127, 55, 0.13);
+  --diff-add-tx: #0a4a1d;
+  --diff-add-edge: #1a7f37;
+  --diff-del-bg: rgba(207, 34, 46, 0.11);
+  --diff-del-tx: #6e0411;
+  --diff-del-edge: #cf222e;
+  --diff-gutter-add: rgba(26, 127, 55, 0.20);
+  --diff-gutter-del: rgba(207, 34, 46, 0.18);
+}
+.dln-add { background: var(--diff-add-bg); color: var(--diff-add-tx); box-shadow: inset 2px 0 0 var(--diff-add-edge); }
+.dln-del { background: var(--diff-del-bg); color: var(--diff-del-tx); box-shadow: inset 2px 0 0 var(--diff-del-edge); }
+.dgut-add { background: var(--diff-gutter-add); color: var(--diff-add-edge); }
+.dgut-del { background: var(--diff-gutter-del); color: var(--diff-del-edge); }
+
+/* Syntax-highlight token colors for the diff view. A span's own color wins over the inherited
+   add/del line color, so highlighted tokens show syntax colors while plain text keeps the diff
+   tint. Dark values on :root; light overridden under [data-theme="light"]. Token classes mirror
+   `diff::highlight::CLASSES` (keyword, string, comment, number, type, function, constant,
+   operator, punctuation, property, variable, namespace). */
+:root {
+  --tok-keyword: #ff9e64;
+  --tok-string: #9ece6a;
+  --tok-comment: #5c7268;
+  --tok-number: #d4a0ff;
+  --tok-type: #5fd0b4;
+  --tok-function: #7aa2f7;
+  --tok-constant: #d4a0ff;
+  --tok-operator: #89a0a8;
+  --tok-punctuation: #89a0a8;
+  --tok-property: #73daca;
+  --tok-variable: #cdd6cf;
+  --tok-namespace: #5fd0b4;
+}
+html[data-theme="light"] {
+  --tok-keyword: #b45309;
+  --tok-string: #1a7f37;
+  --tok-comment: #6b7280;
+  --tok-number: #7c3aed;
+  --tok-type: #0f766e;
+  --tok-function: #1d4ed8;
+  --tok-constant: #7c3aed;
+  --tok-operator: #4b5563;
+  --tok-punctuation: #4b5563;
+  --tok-property: #0e7490;
+  --tok-variable: #111827;
+  --tok-namespace: #0f766e;
+}
+.tok-keyword { color: var(--tok-keyword); }
+.tok-string { color: var(--tok-string); }
+.tok-comment { color: var(--tok-comment); font-style: italic; }
+.tok-number { color: var(--tok-number); }
+.tok-type { color: var(--tok-type); }
+.tok-function { color: var(--tok-function); }
+.tok-constant { color: var(--tok-constant); }
+.tok-operator { color: var(--tok-operator); }
+.tok-punctuation { color: var(--tok-punctuation); }
+.tok-property { color: var(--tok-property); }
+.tok-variable { color: var(--tok-variable); }
+.tok-namespace { color: var(--tok-namespace); }
+
+/* Themed scrollbars — thin, dark track, minimal thumb; shown only when scrollable.
+   ::-webkit-scrollbar covers WKWebView (macOS) + WebView2 (Windows). */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-scrollbar) transparent;
+}
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-scrollbar-hover); }
+::-webkit-scrollbar-corner { background: transparent; }
